@@ -7,7 +7,7 @@ minMaxScaler = MinMaxScaler()
 
 skip_line = '\n----------------------------------------------------------------'
 
-num_colums = ['SalePrice', 'OverallQual', 'GrLivArea', 'GarageCars', 'YearBuilt']
+num_colums = ['OverallQual', 'GrLivArea', 'GarageCars', 'YearBuilt']
 
 categorical_colums = [
     'MSZoning',       # Тип зонирования (жилая, коммерческая и т.д.)
@@ -17,10 +17,10 @@ categorical_colums = [
     'CentralAir'      # Наличие кондиционера (Y/N)
 ]
 
-selected_columns = [*num_colums, *categorical_colums]
+selected_columns = [*num_colums, *categorical_colums, 'SalePrice']
 
 data = pd.read_csv('../train.csv', usecols=selected_columns)
-#data = pd.read_csv('titanic.csv', usecols=selected_columns)
+#data = pd.read_csv('../test.csv', usecols=selected_columns)
 
 data = data.drop_duplicates()
 
@@ -29,18 +29,12 @@ print(data.head())
 
 print(skip_line)
 
-std_num_colums_scale_colums = ['SalePrice', 'OverallQual', 'GrLivArea', 'YearBuilt']
+std_num_colums_scale_colums = ['OverallQual', 'GrLivArea', 'YearBuilt']
 nm_num_colums_scale_colums = ['GarageCars']
 
 num_data = data[num_colums]
 
 print("\nКол-во пропусков")
-print(num_data.isnull().sum())
-
-# 1 поле, но можно описать все (если есть пропуски в столбцах)
-num_data.loc[:, 'SalePrice'] = num_data.loc[:, 'SalePrice'].fillna(num_data['SalePrice'].median())
-
-print()
 print(num_data.isnull().sum())
 
 print(skip_line)
@@ -89,7 +83,8 @@ print(data_encoded)
 print(skip_line)
 
 print("Финальная выборка")
-data_final = pd.concat([std_num_data_scaled, nm_num_data_scaled, data_encoded], axis=1)
+sale_prices = pd.DataFrame(data, columns=['SalePrice'])
+data_final = pd.concat([std_num_data_scaled, nm_num_data_scaled, data_encoded, sale_prices], axis=1)
 
 existing_cat_cols = [col for col in categorical_colums if col in data_final.columns]
 data_final = data_final.drop(existing_cat_cols, axis=1)
