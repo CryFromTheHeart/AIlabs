@@ -68,7 +68,7 @@ for method_name, mse_scores in results.items():
 plt.axhline(y=mse_all, color='r', linestyle='--', label='Все признаки')
 plt.xlabel('Количество выбранных признаков')
 plt.ylabel('MSE')
-plt.title('Зависимость MSE от количества выбранных признаков (с биннингом SalePrice)')
+plt.title('Зависимость MSE от количества выбранных признаков')
 plt.legend()
 plt.grid()
 plt.show()
